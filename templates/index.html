@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>📝 My Task Manager</h1>
+            <p>Keep track of your daily tasks!</p>
+        </header>
+
+        <!-- Form to Add New Tasks -->
+        <div class="add-task-section">
+            <form action="/add" method="POST">
+                <input 
+                    type="text" 
+                    name="task" 
+                    placeholder="Enter a new task..." 
+                    required
+                    class="task-input"
+                >
+                <button type="submit" class="add-button">Add Task</button>
+            </form>
+        </div>
+
+        <!-- List of All Tasks -->
+        <div class="tasks-section">
+            <h2>Your Tasks</h2>
+            
+            {% if tasks %}
+                <!-- Loop through all tasks -->
+                {% for task in tasks %}
+                    <div class="task-item {% if task.completed %}completed{% endif %}">
+                        <div class="task-content">
+                            <span class="task-text">{{ task.content }}</span>
+                            {% if task.completed %}
+                                <span class="badge">✓ Done</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="task-actions">
+                            {% if not task.completed %}
+                                <a href="/complete/{{ task.id }}" class="btn-complete">Complete</a>
+                            {% endif %}
+                            <a href="/delete/{{ task.id }}" class="btn-delete">Delete</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- Show this if there are no tasks -->
+                <p class="no-tasks">No tasks yet! Add one above to get started. 🎉</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
